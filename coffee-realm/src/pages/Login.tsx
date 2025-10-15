@@ -6,17 +6,25 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { Coffee, AlertCircle, Mail, Lock } from 'lucide-react'
+import { Coffee, AlertCircle, Mail, Lock, User, CheckCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export const Login: React.FC = () => {
+  // Form states
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  
+  // UI states
+  const [isRegisterMode, setIsRegisterMode] = useState(false)
+  const [showEmailConfirmation, setShowEmailConfirmation] = useState(false)
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
   
-  const { user, signIn, signInWithGoogle } = useAuth()
+  const { user, signIn, signUp, signInWithGoogle } = useAuth()
   const location = useLocation()
   
   const from = location.state?.from?.pathname || '/dashboard'
@@ -36,15 +44,30 @@ export const Login: React.FC = () => {
     e.preventDefault()
     setLoading(true)
     setError(null)
+    setSuccess(null)
 
-    const { error } = await signIn(email, password)
-    
-    if (error) {
-      setError(error.message)
+    if (isRegisterMode) {
+      const { error } = await signUp(email, password, firstName, lastName)
+      
+      if (error) {
+        setError(error.message)
+        setLoading(false)
+      } else {
+        setSuccess('Registration successful! Please check your email and click the confirmation link to activate your account.')
+        setShowEmailConfirmation(true)
+        setLoading(false)
+      }
+    } else {
+      const { error } = await signIn(email, password)
+      
+      if (error) {
+        setError(error.message)
+      }
+      
+      setLoading(false)
     }
-    
-    setLoading(false)
   }
+
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true)
@@ -55,6 +78,18 @@ export const Login: React.FC = () => {
     if (error) {
       setError(error.message)
       setGoogleLoading(false)
+    }
+  }
+
+  const toggleRegisterMode = () => {
+    setIsRegisterMode(!isRegisterMode)
+    setError(null)
+    setSuccess(null)
+    setShowEmailConfirmation(false)
+    // Clear form fields when switching modes
+    if (!isRegisterMode) {
+      setFirstName('')
+      setLastName('')
     }
   }
 
@@ -78,9 +113,16 @@ export const Login: React.FC = () => {
         
         <Card className="bg-white border border-gray-100 rounded-2xl overflow-hidden">
           <CardHeader className="space-y-1 pb-4 sm:pb-6 pt-4 sm:pt-6 px-4 sm:px-6">
-            <CardTitle className="text-lg sm:text-xl font-semibold text-center text-gray-900">Welcome Back</CardTitle>
+            <CardTitle className="text-lg sm:text-xl font-semibold text-center text-gray-900">
+              {showEmailConfirmation ? 'Check Your Email' : isRegisterMode ? 'Create Account' : 'Welcome Back'}
+            </CardTitle>
             <CardDescription className="text-center text-gray-500 text-sm">
-              Sign in to your dashboard
+              {showEmailConfirmation 
+                ? 'We sent you a confirmation link'
+                : isRegisterMode 
+                  ? 'Sign up to get started'
+                  : 'Sign in to your dashboard'
+              }
             </CardDescription>
           </CardHeader>
           
@@ -96,73 +138,193 @@ export const Login: React.FC = () => {
               </div>
             )}
 
-            {/* Email/Password Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-1">
-                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                  Email
-                </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className={cn(
-                      "h-11 pl-10 pr-4 border-gray-200 rounded-lg",
-                      "focus:border-orange-500 focus:ring-1 focus:ring-orange-500",
-                      "transition-colors placeholder:text-gray-400"
-                    )}
-                    required
-                    disabled={loading || googleLoading}
-                  />
-                </div>
+            {/* Success Message */}
+            {success && (
+              <div className={cn(
+                "flex items-center space-x-2 p-3 rounded-lg",
+                "bg-green-50 border border-green-200 text-green-600"
+              )}>
+                <CheckCircle className="h-4 w-4 flex-shrink-0" />
+                <span className="text-sm">{success}</span>
               </div>
-              
-              <div className="space-y-1">
-                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
-                  Password
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className={cn(
-                      "h-11 pl-10 pr-4 border-gray-200 rounded-lg",
-                      "focus:border-orange-500 focus:ring-1 focus:ring-orange-500",
-                      "transition-colors placeholder:text-gray-400"
-                    )}
-                    required
-                    disabled={loading || googleLoading}
-                  />
-                </div>
-              </div>
-              
-              <Button 
-                type="submit" 
-                className={cn(
-                  "w-full h-11 bg-orange-500 hover:bg-orange-600",
-                  "text-white font-medium rounded-lg",
-                  "transition-colors"
-                )}
-                disabled={loading || googleLoading}
-              >
-                {loading ? (
-                  <div className="flex items-center space-x-2">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                    <span>Signing in...</span>
+            )}
+
+            {/* Email Confirmation */}
+            {showEmailConfirmation ? (
+              <div className="space-y-4">
+                <div className="text-center space-y-4">
+                  <div className="mx-auto w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center">
+                    <Mail className="h-8 w-8 text-orange-500" />
                   </div>
-                ) : (
-                  'Sign In'
+                  
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-600">
+                      We sent a confirmation link to
+                    </p>
+                    <p className="font-medium text-gray-900">{email}</p>
+                    <p className="text-sm text-gray-500">
+                      Click the link in the email to activate your account, then come back here to sign in.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex flex-col space-y-2">
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      setShowEmailConfirmation(false)
+                      setIsRegisterMode(false)
+                      setSuccess(null)
+                    }}
+                    className={cn(
+                      "w-full h-11 bg-orange-500 hover:bg-orange-600",
+                      "text-white font-medium rounded-lg",
+                      "transition-colors"
+                    )}
+                  >
+                    Back to Sign In
+                  </Button>
+                  
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      // Resend confirmation email
+                      signUp(email, password, firstName, lastName)
+                    }}
+                    className={cn(
+                      "w-full h-10 border-gray-200 rounded-lg",
+                      "hover:bg-gray-50 text-gray-700 font-medium",
+                      "transition-colors"
+                    )}
+                  >
+                    Resend Confirmation Email
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              /* Registration/Login Form */
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {/* First Name and Last Name - only show in register mode */}
+                {isRegisterMode && (
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">
+                        First Name
+                      </Label>
+                      <div className="relative">
+                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Input
+                          id="firstName"
+                          type="text"
+                          placeholder="First name"
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          className={cn(
+                            "h-11 pl-10 pr-4 border-gray-200 rounded-lg",
+                            "focus:border-orange-500 focus:ring-1 focus:ring-orange-500",
+                            "transition-colors placeholder:text-gray-400"
+                          )}
+                          required
+                          disabled={loading || googleLoading}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <Label htmlFor="lastName" className="text-sm font-medium text-gray-700">
+                        Last Name
+                      </Label>
+                      <div className="relative">
+                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Input
+                          id="lastName"
+                          type="text"
+                          placeholder="Last name"
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                          className={cn(
+                            "h-11 pl-10 pr-4 border-gray-200 rounded-lg",
+                            "focus:border-orange-500 focus:ring-1 focus:ring-orange-500",
+                            "transition-colors placeholder:text-gray-400"
+                          )}
+                          required
+                          disabled={loading || googleLoading}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 )}
-              </Button>
-            </form>
+
+                {/* Email Field */}
+                <div className="space-y-1">
+                  <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                    Email
+                  </Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className={cn(
+                        "h-11 pl-10 pr-4 border-gray-200 rounded-lg",
+                        "focus:border-orange-500 focus:ring-1 focus:ring-orange-500",
+                        "transition-colors placeholder:text-gray-400"
+                      )}
+                      required
+                      disabled={loading || googleLoading}
+                    />
+                  </div>
+                </div>
+                
+                {/* Password Field */}
+                <div className="space-y-1">
+                  <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                    Password
+                  </Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="Enter your password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className={cn(
+                        "h-11 pl-10 pr-4 border-gray-200 rounded-lg",
+                        "focus:border-orange-500 focus:ring-1 focus:ring-orange-500",
+                        "transition-colors placeholder:text-gray-400"
+                      )}
+                      required
+                      disabled={loading || googleLoading}
+                    />
+                  </div>
+                </div>
+                
+                {/* Submit Button */}
+                <Button 
+                  type="submit" 
+                  className={cn(
+                    "w-full h-11 bg-orange-500 hover:bg-orange-600",
+                    "text-white font-medium rounded-lg",
+                    "transition-colors"
+                  )}
+                  disabled={loading || googleLoading}
+                >
+                  {loading ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      <span>{isRegisterMode ? 'Creating Account...' : 'Signing in...'}</span>
+                    </div>
+                  ) : (
+                    isRegisterMode ? 'Create Account' : 'Sign In'
+                  )}
+                </Button>
+              </form>
+            )}
 
             {/* Divider */}
             <div className="relative py-3">
@@ -207,6 +369,22 @@ export const Login: React.FC = () => {
               </svg>
               {googleLoading ? 'Connecting...' : 'Continue with Google'}
             </Button>
+
+            {/* Toggle Register/Login */}
+            {!showEmailConfirmation && (
+              <div className="text-center pt-3">
+                <button
+                  type="button"
+                  onClick={toggleRegisterMode}
+                  className="text-sm text-orange-500 hover:text-orange-600 font-medium transition-colors"
+                >
+                  {isRegisterMode 
+                    ? 'Already have an account? Sign in' 
+                    : "Don't have an account? Sign up"
+                  }
+                </button>
+              </div>
+            )}
 
             {/* Footer */}
             <div className="text-center pt-3">
