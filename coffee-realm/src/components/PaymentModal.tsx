@@ -160,18 +160,18 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <CreditCard className="h-5 w-5" />
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto mx-4 sm:mx-0">
+        <DialogHeader className="px-4 sm:px-6">
+          <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl">
+            <CreditCard className="h-4 w-4 sm:h-5 sm:w-5" />
             Payment Processing
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-sm">
             Complete your order payment with Xendit
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6 px-4 sm:px-6">
           {/* Order Summary */}
           <OrderSummary
             items={items}
@@ -212,18 +212,18 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               />
 
               {/* Action Buttons */}
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Button
                   variant="outline"
                   onClick={onClose}
-                  className="flex-1"
+                  className="flex-1 order-2 sm:order-1"
                 >
                   Cancel
                 </Button>
                 <Button
                   onClick={handleCreatePayment}
                   disabled={loading || !customerName.trim()}
-                  className="flex-1 bg-orange-600 hover:bg-orange-700"
+                  className="flex-1 bg-orange-600 hover:bg-orange-700 order-1 sm:order-2"
                 >
                   {loading ? (
                     <>

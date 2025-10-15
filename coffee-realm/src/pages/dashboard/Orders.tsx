@@ -101,14 +101,14 @@ export const Orders: React.FC = () => {
       </div>
 
       {/* Daily Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Today's Sales</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₱ {xenditService.formatAmount(dailyStats.totalSales).toLocaleString()}</div>
+            <div className="text-lg sm:text-2xl font-bold">₱ {xenditService.formatAmount(dailyStats.totalSales).toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
               From {dailyStats.completedOrders} completed orders
             </p>
@@ -121,7 +121,7 @@ export const Orders: React.FC = () => {
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{dailyStats.totalOrders}</div>
+            <div className="text-lg sm:text-2xl font-bold">{dailyStats.totalOrders}</div>
             <p className="text-xs text-muted-foreground">
               Orders placed today
             </p>
@@ -134,7 +134,7 @@ export const Orders: React.FC = () => {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₱ {xenditService.formatAmount(dailyStats.averageOrderValue).toLocaleString()}</div>
+            <div className="text-lg sm:text-2xl font-bold">₱ {xenditService.formatAmount(dailyStats.averageOrderValue).toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
               Per completed order
             </p>
@@ -147,7 +147,7 @@ export const Orders: React.FC = () => {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-lg sm:text-2xl font-bold">
               {orders.filter(order => ['pending', 'preparing', 'ready'].includes(order.status)).length}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -173,12 +173,13 @@ export const Orders: React.FC = () => {
             
             {/* Status Filter */}
             <div className="flex items-center gap-2">
-              <Filter className="h-4 w-4 text-muted-foreground" />
-              <div className="flex flex-wrap gap-1">
+              <Filter className="h-4 w-4 text-muted-foreground hidden sm:block" />
+              <div className="flex flex-wrap gap-1 overflow-x-auto pb-2">
                 <Button
                   size="sm"
                   variant={statusFilter === 'all' ? 'default' : 'outline'}
                   onClick={() => setStatusFilter('all')}
+                  className="flex-shrink-0"
                 >
                   All
                 </Button>
@@ -188,6 +189,7 @@ export const Orders: React.FC = () => {
                     size="sm"
                     variant={statusFilter === status ? 'default' : 'outline'}
                     onClick={() => setStatusFilter(status as OrderStatus)}
+                    className="flex-shrink-0"
                   >
                     {config.label}
                   </Button>
@@ -198,7 +200,7 @@ export const Orders: React.FC = () => {
         </CardHeader>
 
         <CardContent>
-          <div className="rounded-md border">
+          <div className="rounded-md border overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>

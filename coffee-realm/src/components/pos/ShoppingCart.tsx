@@ -34,23 +34,23 @@ export const ShoppingCartComponent: React.FC<ShoppingCartProps> = ({
   onClearCart,
 }) => {
   return (
-    <div className="w-96 flex flex-col bg-white border-l border-gray-200 h-full">
+    <div className="w-full lg:w-80 xl:w-96 flex flex-col bg-white border-t lg:border-t-0 lg:border-l border-gray-200 h-full">
       <Card className="flex-1 border-0 rounded-none flex flex-col h-full">
-        <CardHeader className="pb-4 flex-shrink-0">
-          <CardTitle className="flex items-center gap-2">
-            <ShoppingCartIcon className="h-5 w-5" />
+        <CardHeader className="pb-3 sm:pb-4 flex-shrink-0 px-4 sm:px-6">
+          <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
+            <ShoppingCartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
             Current Order
             {itemCount > 0 && (
-              <Badge variant="default" className="bg-orange-600">
+              <Badge variant="default" className="bg-orange-600 text-xs">
                 {itemCount}
               </Badge>
             )}
           </CardTitle>
         </CardHeader>
 
-        <CardContent className="flex-1 flex flex-col min-h-0">
+        <CardContent className="flex-1 flex flex-col min-h-0 px-4 sm:px-6">
           {/* Cart Items - Fixed height with scroll */}
-          <div className="flex-1 min-h-0 overflow-y-auto space-y-3 mb-4 pr-2">
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-2 sm:space-y-3 mb-3 sm:mb-4 pr-1 sm:pr-2">
             {items.length === 0 ? (
               <div className="text-center text-muted-foreground py-8">
                 <ShoppingCartIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
