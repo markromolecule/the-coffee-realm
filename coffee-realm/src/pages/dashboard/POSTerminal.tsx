@@ -141,35 +141,37 @@ export const POSTerminal: React.FC = () => {
         onDismiss={() => setPaymentResult(null)}
       />
 
-      <div className="flex-1 flex gap-6">
-      {/* Left Side - Products */}
-      <div className="flex-1 flex flex-col">
-        <CategoryNavigation
-          categories={allCategories}
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-        />
+              <div className="flex-1 flex flex-col lg:flex-row gap-4 lg:gap-6">
+              {/* Left Side - Products */}
+              <div className="flex-1 flex flex-col min-w-0">
+                <CategoryNavigation
+                  categories={allCategories}
+                  selectedCategory={selectedCategory}
+                  onCategoryChange={setSelectedCategory}
+                />
 
-        <ProductGrid
-          items={filteredItems}
-          onAddToCart={handleAddToCart}
-        />
-      </div>
+                <ProductGrid
+                  items={filteredItems}
+                  onAddToCart={handleAddToCart}
+                />
+              </div>
 
-      {/* Right Side - Cart */}
-      <ShoppingCartComponent
-        items={cartItems}
-        total={total}
-        tax={tax}
-        grandTotal={grandTotal}
-        itemCount={itemCount}
-        paymentMethod={paymentMethod}
-        onUpdateQuantity={updateQuantity}
-        onRemoveItem={removeItem}
-        onPaymentMethodChange={setPaymentMethod}
-        onCheckout={handleCheckout}
-        onClearCart={clearCart}
-      />
+              {/* Right Side - Cart */}
+              <div className="w-full lg:w-80 xl:w-96 flex-shrink-0">
+                <ShoppingCartComponent
+                  items={cartItems}
+                  total={total}
+                  tax={tax}
+                  grandTotal={grandTotal}
+                  itemCount={itemCount}
+                  paymentMethod={paymentMethod}
+                  onUpdateQuantity={updateQuantity}
+                  onRemoveItem={removeItem}
+                  onPaymentMethodChange={setPaymentMethod}
+                  onCheckout={handleCheckout}
+                  onClearCart={clearCart}
+                />
+              </div>
 
       {/* Payment Modal */}
       <PaymentModal

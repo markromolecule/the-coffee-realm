@@ -145,14 +145,14 @@ export const Inventory: React.FC = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Items</CardTitle>
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{items.length}</div>
+            <div className="text-lg sm:text-2xl font-bold">{items.length}</div>
             <p className="text-xs text-muted-foreground">
               {activeItems} active items
             </p>
@@ -165,7 +165,7 @@ export const Inventory: React.FC = () => {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₱ {xenditService.formatAmount(totalValue).toLocaleString()}</div>
+            <div className="text-lg sm:text-2xl font-bold">₱ {xenditService.formatAmount(totalValue).toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
               Based on cost price
             </p>
@@ -178,7 +178,7 @@ export const Inventory: React.FC = () => {
             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{lowStockCount}</div>
+            <div className="text-lg sm:text-2xl font-bold text-red-600">{lowStockCount}</div>
             <p className="text-xs text-muted-foreground">
               Need restocking
             </p>
@@ -191,7 +191,7 @@ export const Inventory: React.FC = () => {
             <Archive className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{categories.length}</div>
+            <div className="text-lg sm:text-2xl font-bold">{categories.length}</div>
             <p className="text-xs text-muted-foreground">
               Product categories
             </p>
@@ -214,11 +214,12 @@ export const Inventory: React.FC = () => {
                 />
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 overflow-x-auto pb-2">
               <Button
                 variant={categoryFilter === 'All' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setCategoryFilter('All')}
+                className="flex-shrink-0"
               >
                 All
               </Button>
@@ -228,6 +229,7 @@ export const Inventory: React.FC = () => {
                   variant={categoryFilter === category ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setCategoryFilter(category)}
+                  className="flex-shrink-0"
                 >
                   {category}
                 </Button>
@@ -250,7 +252,7 @@ export const Inventory: React.FC = () => {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Name</Label>
                   <Input

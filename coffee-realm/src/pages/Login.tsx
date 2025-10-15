@@ -59,32 +59,32 @@ export const Login: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white p-4">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen flex items-center justify-center bg-white p-4 sm:p-6 lg:p-8">
+      <div className="w-full max-w-sm sm:max-w-md">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6 sm:mb-8">
           <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="p-2 bg-orange-500 rounded-xl">
-              <Coffee className="h-6 w-6 text-white" />
+            <div className="p-2 sm:p-3 bg-orange-500 rounded-xl">
+              <Coffee className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
             </div>
             <div className="text-left">
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
                 The Coffee Realm
               </h1>
-              <p className="text-xs text-gray-500">North Fairview</p>
+              <p className="text-xs sm:text-sm text-gray-500">North Fairview</p>
             </div>
           </div>
         </div>
         
         <Card className="bg-white border border-gray-100 rounded-2xl overflow-hidden">
-          <CardHeader className="space-y-1 pb-6 pt-6 px-6">
-            <CardTitle className="text-xl font-semibold text-center text-gray-900">Welcome Back</CardTitle>
+          <CardHeader className="space-y-1 pb-4 sm:pb-6 pt-4 sm:pt-6 px-4 sm:px-6">
+            <CardTitle className="text-lg sm:text-xl font-semibold text-center text-gray-900">Welcome Back</CardTitle>
             <CardDescription className="text-center text-gray-500 text-sm">
               Sign in to your dashboard
             </CardDescription>
           </CardHeader>
           
-          <CardContent className="space-y-5 p-6 pt-0">
+          <CardContent className="space-y-4 sm:space-y-5 p-4 sm:p-6 pt-0">
             {/* Error Message */}
             {error && (
               <div className={cn(

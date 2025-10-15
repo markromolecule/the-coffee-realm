@@ -14,7 +14,7 @@ interface ProductGridProps {
 export const ProductGrid: React.FC<ProductGridProps> = ({ items, onAddToCart }) => {
   return (
     <div className="flex-1 overflow-y-auto">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
         {items.map((item) => (
           <Card
             key={item.id}
@@ -25,9 +25,9 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ items, onAddToCart }) 
             )}
             onClick={() => onAddToCart(item)}
           >
-            <CardContent className="p-4">
+            <CardContent className="p-3 sm:p-4">
               {/* Item Image */}
-              <div className="w-full h-24 bg-gray-100 rounded-md mb-3 flex items-center justify-center overflow-hidden">
+              <div className="w-full h-20 sm:h-24 bg-gray-100 rounded-md mb-2 sm:mb-3 flex items-center justify-center overflow-hidden">
                 {item.image ? (
                   <img
                     src={item.image}
@@ -49,16 +49,16 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ items, onAddToCart }) 
               </div>
               {/* Item Info */}
               <div>
-                <h3 className="font-semibold text-sm leading-tight">{item.name}</h3>
-                <p className="text-xs text-muted-foreground line-clamp-2">
+                <h3 className="font-semibold text-xs sm:text-sm leading-tight">{item.name}</h3>
+                <p className="text-xs text-muted-foreground line-clamp-2 hidden sm:block">
                   {item.description || 'Delicious item from our menu'}
                 </p>
                 
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold text-orange-600">
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-sm sm:text-lg font-bold text-orange-600">
                     ₱ {xenditService.formatAmount(item.price).toLocaleString()}
                   </span>
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant="secondary" className="text-xs hidden sm:inline-flex">
                     Stock: {item.stock}
                   </Badge>
                 </div>
