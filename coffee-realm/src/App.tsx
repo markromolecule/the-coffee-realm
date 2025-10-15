@@ -8,6 +8,7 @@ import { POSTerminal } from '@/pages/dashboard/POSTerminal'
 import { Orders } from '@/pages/dashboard/Orders'
 import { Inventory } from '@/pages/dashboard/Inventory'
 import { useStoreInitializer } from '@/hooks/useStoreInitializer'
+import { Analytics } from '@vercel/analytics/react'
 import './App.css'
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </Router>
+      <Analytics />
     </AuthProvider>
   )
 }
