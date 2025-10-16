@@ -26,8 +26,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(session?.user ?? null)
       setLoading(false)
       
-      // Handle OAuth callback and profile creation
-      if (event === 'SIGNED_IN' && session?.user) {
+      // Handle different auth events
+      if (event === 'SIGNED_OUT') {
+        console.log('User signed out successfully')
+      } else if (event === 'SIGNED_IN' && session?.user) {
+        console.log('User signed in successfully')
         // Clear any URL fragments after successful auth
         if (window.location.hash.includes('access_token')) {
           window.history.replaceState({}, document.title, window.location.pathname)
@@ -87,7 +90,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   const signOut = async () => {
-    return await supabase.auth.signOut()
+    console.log('Attempting to sign out user')
+    try {
+      const result = await supabase.auth.signOut()
+      console.log('Sign out result:', result)
+      return result
+    } catch (error) {
+      console.error('Sign out error:', error)
+      throw error
+    }
   }
 
   const value = {

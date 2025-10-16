@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { LogoutConfirmationModal } from '@/components/authentication/logout-confirmation-modal'
 import {
   Coffee,
   LayoutDashboard,
@@ -43,10 +44,55 @@ export const DashboardLayout: React.FC = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [logoutLoading, setLogoutLoading] = useState(false)
+  const [showLogoutModal, setShowLogoutModal] = useState(false)
 
-  const handleLogout = async () => {
-    await signOut()
-    navigate('/login')
+  // Debug state changes
+  useEffect(() => {
+    console.log('showLogoutModal state changed to:', showLogoutModal)
+  }, [showLogoutModal])
+
+  const handleLogoutClick = () => {
+    console.log('Logout button clicked!')
+    console.log('Current showLogoutModal state:', showLogoutModal)
+    setShowLogoutModal(true)
+    console.log('Setting showLogoutModal to true')
+  }
+
+  const handleLogoutConfirm = async () => {
+    setLogoutLoading(true)
+    try {
+      // Sign out from Supabase
+      await signOut()
+      
+      // Clear any local storage items
+      localStorage.clear()
+      sessionStorage.clear()
+      
+      // Clear any cookies (if any are set)
+      document.cookie.split(";").forEach((c) => {
+        const eqPos = c.indexOf("=")
+        const name = eqPos > -1 ? c.substr(0, eqPos) : c
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/"
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=" + window.location.hostname
+      })
+      
+      setShowLogoutModal(false)
+      navigate('/login')
+    } catch (error) {
+      console.error('Logout failed:', error)
+      // Still clear local data and navigate to login even if signOut fails
+      localStorage.clear()
+      sessionStorage.clear()
+      setShowLogoutModal(false)
+      navigate('/login')
+    } finally {
+      setLogoutLoading(false)
+    }
+  }
+
+  const handleLogoutCancel = () => {
+    setShowLogoutModal(false)
   }
 
   return (
@@ -120,10 +166,11 @@ export const DashboardLayout: React.FC = () => {
             </div>
           </div>
           <Button
-            onClick={handleLogout}
+            onClick={handleLogoutClick}
             variant="outline"
             size="sm"
             className="w-full"
+            disabled={logoutLoading}
           >
             <LogOut className="mr-2 h-4 w-4" />
             Logout
@@ -167,6 +214,47 @@ export const DashboardLayout: React.FC = () => {
           </div>
         </main>
       </div>
+
+
+
+      {/* Debug indicator */}
+      {showLogoutModal && (
+        <div className="fixed top-4 right-4 bg-red-500 text-white p-2 rounded z-50">
+          Modal should be open: {showLogoutModal.toString()}
+        </div>
+      )}
+
+      {/* Simple test modal */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
+            <h2 className="text-xl font-bold mb-4">Test Modal</h2>
+            <p className="mb-4">This is a test modal to see if it shows up.</p>
+            <div className="flex gap-2">
+              <button 
+                onClick={handleLogoutCancel} 
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleLogoutConfirm} 
+                className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600"
+              >
+                Confirm Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Logout Confirmation Modal */}
+      <LogoutConfirmationModal
+        isOpen={showLogoutModal}
+        onClose={handleLogoutCancel}
+        onConfirm={handleLogoutConfirm}
+        loading={logoutLoading}
+      />
     </div>
   )
 }

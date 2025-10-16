@@ -376,6 +376,38 @@ console.log(import.meta.env.VITE_SUPABASE_URL)
 # - Test with different email providers (Gmail, Outlook, etc.)
 ```
 
+#### 8. Logout Button Not Working
+```bash
+# Check browser console for errors:
+# 1. Open browser developer tools (F12)
+# 2. Go to Console tab
+# 3. Click logout button and check for error messages
+
+# Common issues and fixes:
+# 1. Supabase connection issues:
+#    - Check if VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are correct
+#    - Verify Supabase project is active and not paused
+
+# 2. Auth state not updating:
+#    - Check if auth state change listener is working
+#    - Look for "Auth state changed: SIGNED_OUT" in console
+
+# 3. Navigation issues:
+#    - Check if React Router is properly configured
+#    - Verify /login route exists in App.tsx
+
+# 4. Button click not registering:
+#    - Check if button is not disabled
+#    - Verify onClick handler is properly attached
+#    - Check for JavaScript errors preventing execution
+
+# Debug steps:
+# 1. Check console logs when clicking logout
+# 2. Verify signOut function is called
+# 3. Check if auth state changes to null
+# 4. Verify navigation to /login works
+```
+
 ### Development Server Issues
 
 #### 1. Port Already in Use
