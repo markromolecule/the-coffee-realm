@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from '@/contexts/auth-provider'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
-import { Login } from '@/pages/Login'
+import { Login, Register } from '@/pages/authentication'
 import { DashboardLayout } from '@/components/DashboardLayout'
 import { Overview } from '@/pages/dashboard/Overview'
 import { POSTerminal } from '@/pages/dashboard/POSTerminal'
@@ -21,6 +21,7 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           
           {/* Protected Dashboard Routes */}
           <Route
