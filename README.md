@@ -19,7 +19,7 @@ A modern, full-stack Point of Sale (POS) system built for coffee shops with real
 - **Modern UI** - Built with Tailwind CSS and Radix UI components
 - **State Management** - Zustand for efficient state handling
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - **React 19** - Modern React with latest features
@@ -41,7 +41,7 @@ A modern, full-stack Point of Sale (POS) system built for coffee shops with real
 - **TypeScript ESLint** - TypeScript-specific linting rules
 - **React Refresh** - Hot module replacement
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
@@ -117,7 +117,7 @@ npm install -g pnpm
 pnpm --version
 ```
 
-### 📦 Project Setup
+### Project Setup
 
 #### 1. Clone the Repository
 ```bash
@@ -162,7 +162,7 @@ pnpm list
 pnpm dev
 ```
 
-### 🔧 Environment Configuration
+### Environment Configuration
 
 #### 1. Create Environment File
 Create a `.env` file in the root directory (`coffee-realm/.env`):
@@ -256,7 +256,7 @@ NODE_ENV=development
 2. Add webhook URL: `https://your-domain.com/api/webhooks/xendit`
 3. Select events: `invoice.paid`, `invoice.expired`
 
-## 🚀 Running the Application
+## Running the Application
 
 ### 1. Start Development Server
 ```bash
@@ -375,31 +375,6 @@ pnpm tsc --noEmit
 
 # Fix any type errors before running dev server
 ```
-
-## 📱 Testing on Mobile
-
-### 1. Find Your Local IP
-```bash
-# On macOS/Linux:
-ifconfig | grep "inet " | grep -v 127.0.0.1
-
-# On Windows:
-ipconfig | findstr "IPv4"
-```
-
-### 2. Start Dev Server with Network Access
-```bash
-# Start with network access
-pnpm dev --host
-
-# Access from mobile: http://YOUR_IP:5173
-```
-
-### 3. Test Mobile Features
-- Touch interactions
-- Responsive design
-- Mobile navigation
-- Payment flow on mobile
 
 ## Production Deployment
 
