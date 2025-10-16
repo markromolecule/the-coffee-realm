@@ -49,14 +49,31 @@ export const Register: React.FC = () => {
     setError(null)
     setSuccess(null)
 
-    const { error } = await signUp(email, password, firstName, lastName)
+    const { data, error } = await signUp(email, password, firstName, lastName)
+    
+    console.log('Register component - Sign up response:', { data, error })
     
     if (error) {
+      console.error('Registration error:', error)
       setError(error.message)
       setLoading(false)
+    } else if (data?.user) {
+      console.log('User created:', data.user)
+      console.log('Email confirmed at:', data.user.email_confirmed_at)
+      
+      if (!data.user.email_confirmed_at) {
+        // Email confirmation is required
+        setSuccess('Registration successful! Please check your email and click the confirmation link to activate your account.')
+        setShowEmailConfirmation(true)
+        setLoading(false)
+      } else {
+        // User is already confirmed (shouldn't happen in normal flow)
+        setSuccess('Registration successful! You can now sign in.')
+        setLoading(false)
+      }
     } else {
-      setSuccess('Registration successful! Please check your email and click the confirmation link to activate your account.')
-      setShowEmailConfirmation(true)
+      console.error('No user data returned from signup')
+      setError('Registration failed. Please try again.')
       setLoading(false)
     }
   }
@@ -78,8 +95,22 @@ export const Register: React.FC = () => {
     setSuccess(null)
   }
 
-  const handleResendConfirmation = () => {
-    signUp(email, password, firstName, lastName)
+  const handleResendConfirmation = async () => {
+    setLoading(true)
+    setError(null)
+    
+    const { data, error } = await signUp(email, password, firstName, lastName)
+    
+    if (error) {
+      setError(`Failed to resend confirmation email: ${error.message}`)
+      setLoading(false)
+    } else if (data?.user) {
+      setSuccess('Confirmation email sent! Please check your email.')
+      setLoading(false)
+    } else {
+      setError('Failed to resend confirmation email. Please try again.')
+      setLoading(false)
+    }
   }
 
   return (
@@ -109,6 +140,7 @@ export const Register: React.FC = () => {
                 email={email}
                 onBackToSignIn={handleBackToSignIn}
                 onResendConfirmation={handleResendConfirmation}
+                loading={loading}
               />
             ) : (
               /* Registration Form */

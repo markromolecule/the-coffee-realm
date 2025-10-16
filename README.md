@@ -350,6 +350,32 @@ console.log(import.meta.env.VITE_SUPABASE_URL)
 # Check Xendit dashboard for correct API keys
 ```
 
+#### 7. Email Confirmation Not Working
+```bash
+# Check Supabase email settings:
+# 1. Go to Supabase Dashboard → Authentication → Settings
+# 2. Verify "Enable email confirmations" is turned ON
+# 3. Check "Site URL" is set to: http://localhost:5173 (for development)
+# 4. Check "Redirect URLs" includes: http://localhost:5173/dashboard
+
+# Check email templates:
+# 1. Go to Authentication → Email Templates
+# 2. Verify "Confirm signup" template is enabled
+# 3. Check if custom SMTP is configured (if using custom email)
+
+# Debug email issues:
+# 1. Check browser console for signup response
+# 2. Check Supabase Dashboard → Authentication → Users
+# 3. Verify user is created but email_confirmed_at is null
+# 4. Check spam folder for confirmation emails
+
+# Common fixes:
+# - Ensure SMTP is properly configured in Supabase
+# - Check if email domain is not blocked
+# - Verify email templates are not disabled
+# - Test with different email providers (Gmail, Outlook, etc.)
+```
+
 ### Development Server Issues
 
 #### 1. Port Already in Use

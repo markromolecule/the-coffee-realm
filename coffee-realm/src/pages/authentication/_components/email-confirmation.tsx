@@ -7,12 +7,14 @@ interface EmailConfirmationProps {
   email: string
   onBackToSignIn: () => void
   onResendConfirmation: () => void
+  loading?: boolean
 }
 
 export const EmailConfirmation: React.FC<EmailConfirmationProps> = ({
   email,
   onBackToSignIn,
-  onResendConfirmation
+  onResendConfirmation,
+  loading = false
 }) => {
   return (
     <div className="space-y-4">
@@ -36,6 +38,7 @@ export const EmailConfirmation: React.FC<EmailConfirmationProps> = ({
         <Button
           type="button"
           onClick={onBackToSignIn}
+          disabled={loading}
           className={cn(
             "w-full h-11 bg-orange-500 hover:bg-orange-600",
             "text-white font-medium rounded-lg",
@@ -49,13 +52,21 @@ export const EmailConfirmation: React.FC<EmailConfirmationProps> = ({
           type="button"
           variant="outline"
           onClick={onResendConfirmation}
+          disabled={loading}
           className={cn(
             "w-full h-10 border-gray-200 rounded-lg",
             "hover:bg-gray-50 text-gray-700 font-medium",
             "transition-colors"
           )}
         >
-          Resend Confirmation Email
+          {loading ? (
+            <div className="flex items-center space-x-2">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600"></div>
+              <span>Sending...</span>
+            </div>
+          ) : (
+            'Resend Confirmation Email'
+          )}
         </Button>
       </div>
     </div>
