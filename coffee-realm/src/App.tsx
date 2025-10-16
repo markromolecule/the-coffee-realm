@@ -7,7 +7,7 @@ import { Overview } from '@/pages/dashboard/Overview'
 import { POSTerminal } from '@/pages/dashboard/POSTerminal'
 import { Orders } from '@/pages/dashboard/Orders'
 import { Inventory } from '@/pages/dashboard/Inventory'
-import { useStoreInitializer } from '@/hooks/useStoreInitializer'
+import { useStoreInitializer } from '@/hooks/use-store-initializer'
 import { Analytics } from '@vercel/analytics/react'
 import './App.css'
 
