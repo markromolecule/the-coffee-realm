@@ -53,10 +53,7 @@ export const DashboardLayout: React.FC = () => {
   }, [showLogoutModal])
 
   const handleLogoutClick = () => {
-    console.log('Logout button clicked!')
-    console.log('Current showLogoutModal state:', showLogoutModal)
     setShowLogoutModal(true)
-    console.log('Setting showLogoutModal to true')
   }
 
   const handleLogoutConfirm = async () => {
@@ -64,11 +61,11 @@ export const DashboardLayout: React.FC = () => {
     try {
       // Sign out from Supabase
       await signOut()
-      
+
       // Clear any local storage items
       localStorage.clear()
       sessionStorage.clear()
-      
+
       // Clear any cookies (if any are set)
       document.cookie.split(";").forEach((c) => {
         const eqPos = c.indexOf("=")
@@ -76,11 +73,13 @@ export const DashboardLayout: React.FC = () => {
         document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/"
         document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=" + window.location.hostname
       })
-      
+
       setShowLogoutModal(false)
       navigate('/login')
     } catch (error) {
+      // Handle error
       console.error('Logout failed:', error)
+
       // Still clear local data and navigate to login even if signOut fails
       localStorage.clear()
       sessionStorage.clear()
@@ -99,16 +98,15 @@ export const DashboardLayout: React.FC = () => {
     <div className="flex h-screen bg-gray-50">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40 bg-black bg-opacity-30 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${
-        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}>
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}>
         {/* Logo */}
         <div className="flex items-center justify-between px-6 py-4 border-b">
           <div className="flex items-center">
@@ -135,11 +133,10 @@ export const DashboardLayout: React.FC = () => {
                   <Link
                     to={item.href}
                     onClick={() => setSidebarOpen(false)}
-                    className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
-                      isActive
+                    className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${isActive
                         ? 'bg-orange-100 text-orange-700 border-r-2 border-orange-600'
                         : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                    }`}
+                      }`}
                   >
                     <item.icon className="mr-3 h-4 w-4 sm:h-5 sm:w-5" />
                     {item.name}
@@ -214,39 +211,6 @@ export const DashboardLayout: React.FC = () => {
           </div>
         </main>
       </div>
-
-
-
-      {/* Debug indicator */}
-      {showLogoutModal && (
-        <div className="fixed top-4 right-4 bg-red-500 text-white p-2 rounded z-50">
-          Modal should be open: {showLogoutModal.toString()}
-        </div>
-      )}
-
-      {/* Simple test modal */}
-      {showLogoutModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
-            <h2 className="text-xl font-bold mb-4">Test Modal</h2>
-            <p className="mb-4">This is a test modal to see if it shows up.</p>
-            <div className="flex gap-2">
-              <button 
-                onClick={handleLogoutCancel} 
-                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-              >
-                Cancel
-              </button>
-              <button 
-                onClick={handleLogoutConfirm} 
-                className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600"
-              >
-                Confirm Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Logout Confirmation Modal */}
       <LogoutConfirmationModal
