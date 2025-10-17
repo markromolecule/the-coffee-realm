@@ -36,6 +36,7 @@ export const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = (
                 <LogOut className="h-5 w-5 text-orange-600" />
               </div>
             </div>
+            {/* Confirmation Content */}
             <div>
               <DialogTitle className="text-lg font-semibold text-gray-900">
                 Confirm Logout
@@ -44,11 +45,11 @@ export const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = (
                 Are you sure you want to sign out of your account?
               </DialogDescription>
             </div>
+
           </div>
         </DialogHeader>
 
-        
-
+        {/* Dialog Footer */}
         <DialogFooter className="flex-col sm:flex-row gap-2">
           <Button
             type="button"
@@ -60,7 +61,7 @@ export const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = (
               "border-gray-200 text-gray-700 hover:bg-gray-50",
               "transition-colors"
             )}
-          >
+            >
             Cancel
           </Button>
           <Button
